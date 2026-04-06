@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Feedback Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        .drop-zone {
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+        .drop-zone--over {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        /* Custom scrollbar for table */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .hidden-view {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800">
+
+    <!-- Navigation Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('dashboard')">
+                    <div class="bg-blue-600 p-2 rounded-lg">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-slate-900">EduFeedback</span>
+                </div>                
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- View 1: Dashboard -->
+        <section id="view-dashboard">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-slate-900">Student Dashboard</h1>
+                <p class="text-slate-500 mt-1">Select a module to manage your assignments.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- EOM Card -->
+                <button onclick="navigateTo('upload')" class="aspect-square bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-4 card-hover hover:border-blue-500 group text-center">
+                    <div class="bg-blue-100 p-4 rounded-xl group-hover:bg-blue-600 transition-colors">
+                        <svg class="w-10 h-10 text-blue-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <span class="text-xl font-bold text-slate-800">EOM</span>
+                    <span class="text-sm text-slate-400">End of Module Tasks</span>
+                </button>
+
+                <!-- Other Placeholders -->
+                <div class="aspect-square bg-white/50 p-8 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-4 opacity-60 grayscale cursor-not-allowed text-center">
+                    <div class="bg-slate-100 p-4 rounded-xl">
+                        <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <span class="text-xl font-bold text-slate-500">Practice</span>
+                    <span class="text-sm text-slate-400">Locked</span>
+                </div>
+
+                <div class="aspect-square bg-white/50 p-8 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-4 opacity-60 grayscale cursor-not-allowed text-center">
+                    <div class="bg-slate-100 p-4 rounded-xl">
+                        <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012-2"></path></svg>
+                    </div>
+                    <span class="text-xl font-bold text-slate-500">History</span>
+                    <span class="text-sm text-slate-400">Coming Soon</span>
+                </div>
+
+                <div class="aspect-square bg-white/50 p-8 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-4 opacity-60 grayscale cursor-not-allowed text-center">
+                    <div class="bg-slate-100 p-4 rounded-xl">
+                        <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                    </div>
+                    <span class="text-xl font-bold text-slate-500">Lab Reports</span>
+                    <span class="text-sm text-slate-400">Locked</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- View 2: Upload Files -->
+        <section id="view-upload" class="hidden-view">
+            <div class="flex items-center gap-4 mb-8">
+                <button onclick="navigateTo('dashboard')" class="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                </button>
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">Submit EOM Assignment</h1>
+                    <p class="text-slate-500">Please upload the question file, your answer file, and the marking scheme file.</p>
+                </div>
+            </div>
+
+            <form id="upload-form" class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Question File Area -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-slate-700">1. Question File</label>
+                        <div class="drop-zone relative border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center bg-white flex flex-col items-center justify-center min-h-[240px]">
+                            <svg class="w-12 h-12 text-blue-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                            <p class="text-slate-600 font-medium">Drag & drop or <span class="text-blue-600 cursor-pointer hover:underline">browse</span></p>
+                            <p class="text-xs text-slate-400 mt-2">Recommended: PDF only</p>
+                            <input type="file" id="questionFile" name="question" class="absolute inset-0 opacity-0 cursor-pointer" required>
+                            <div id="questionFileName" class="mt-4 text-sm font-semibold text-blue-600 hidden"></div>
+                        </div>
+                    </div>
+
+                    <!-- Answer File Area -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-slate-700">2. Answer File</label>
+                        <div class="drop-zone relative border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center bg-white flex flex-col items-center justify-center min-h-[240px]">
+                            <svg class="w-12 h-12 text-emerald-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <p class="text-slate-600 font-medium">Drag & drop or <span class="text-emerald-600 cursor-pointer hover:underline">browse</span></p>
+                            <p class="text-xs text-slate-400 mt-2">Upload your completed work</p>
+                            <input type="file" id="answerFile" name="answer" class="absolute inset-0 opacity-0 cursor-pointer" required>
+                            <div id="answerFileName" class="mt-4 text-sm font-semibold text-emerald-600 hidden"></div>
+                        </div>
+                    </div>
+                    <!-- Marking Scheme File Area -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-slate-700">3. Marking Scheme File</label>
+                        <div class="drop-zone relative border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center bg-white flex flex-col items-center justify-center min-h-[240px]">
+                            <svg class="w-12 h-12 text-violet-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3-3v6m5 4H7a2 2 0 01-2-2V7a2 2 0 012-2h3l2-2h5a2 2 0 012 2v12a2 2 0 01-2 2z"></path></svg>
+                            <p class="text-slate-600 font-medium">Drag & drop or <span class="text-violet-600 cursor-pointer hover:underline">browse</span></p>
+                            <p class="text-xs text-slate-400 mt-2">Upload the lecturer marking scheme</p>
+                            <input type="file" id="markingSchemeFile" name="markingScheme" class="absolute inset-0 opacity-0 cursor-pointer" required>
+                            <div id="markingSchemeFileName" class="mt-4 text-sm font-semibold text-violet-600 hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-4">
+                    <button type="submit" id="submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-xl transition-all shadow-lg hover:shadow-blue-200 active:scale-95 flex items-center gap-2">
+                        <span>Submit for Feedback</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- View 3: Loading State -->
+        <section id="view-loading" class="hidden-view text-center py-20">
+            <div class="flex flex-col items-center">
+                <div class="relative w-24 h-24 mb-6">
+                    <div class="absolute inset-0 border-4 border-slate-200 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">Analyzing Your Submission</h2>
+                <p class="text-slate-500 max-w-md mx-auto">Your files are being delivered to the analysis engine...</p>
+            </div>
+        </section>
+
+        <!-- View 4: Feedback Table -->
+        <section id="view-feedback" class="hidden-view">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-900">Detailed Feedback</h1>
+                    <p class="text-slate-500">Module: EOM Assignment Performance</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="navigateTo('upload')" class="bg-white border border-slate-200 text-slate-700 py-2 px-5 rounded-lg hover:bg-slate-50 transition-colors">Re-submit</button>
+                    <button onclick="window.print()" class="bg-slate-900 text-white py-2 px-5 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        Print Report
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="table-container overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200">
+                                <th class="py-4 px-6 font-bold text-slate-700 text-sm uppercase tracking-wider w-1/4">Task / Category</th>
+                                <th class="py-4 px-6 font-bold text-slate-700 text-sm uppercase tracking-wider w-1/4">Requirements</th>
+                                <th class="py-4 px-6 font-bold text-slate-700 text-sm uppercase tracking-wider w-1/3">Detailed Feedback</th>
+                                <th class="py-4 px-6 font-bold text-slate-700 text-sm uppercase tracking-wider text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="feedback-table-body" class="divide-y divide-slate-100">
+                            <!-- Dynamic rows injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="empty-feedback" class="hidden text-center py-20 bg-white rounded-2xl border-2 border-dashed border-slate-200 mt-4">
+                <p class="text-slate-500">No feedback data available. Please try submitting again.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- UI Message Notifications -->
+    <div id="notification" class="fixed bottom-8 right-8 transform translate-y-20 opacity-0 transition-all duration-500 z-[100] bg-red-600 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+        <svg id="notif-icon-error" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span id="notification-msg">Error occurred</span>
+    </div>
+
+    <script>
+        // Configuration
+        const WEBHOOK_URL = 'https://n8n.srv1326411.hstgr.cloud/webhook/assignment-check'; 
+
+        // State Manager
+        function navigateTo(viewId) {
+            const views = ['dashboard', 'upload', 'loading', 'feedback'];
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if (v === viewId) {
+                    el.classList.remove('hidden-view');
+                } else {
+                    el.classList.add('hidden-view');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Handle File Input UI Updates
+        const setupFileInput = (inputId, displayId) => {
+            const input = document.getElementById(inputId);
+            const display = document.getElementById(displayId);
+            const dropZone = input.parentElement;
+
+            input.addEventListener('change', (e) => {
+                if (input.files.length > 0) {
+                    display.innerText = `Selected: ${input.files[0].name}`;
+                    display.classList.remove('hidden');
+                    dropZone.classList.add('border-blue-500', 'bg-blue-50');
+                }
+            });
+
+            ['dragover', 'dragleave', 'drop'].forEach(evt => {
+                dropZone.addEventListener(evt, (e) => {
+                    e.preventDefault();
+                    if (evt === 'dragover') dropZone.classList.add('drop-zone--over');
+                    else dropZone.classList.remove('drop-zone--over');
+                });
+            });
+        };
+
+        setupFileInput('questionFile', 'questionFileName');
+        setupFileInput('answerFile', 'answerFileName');
+        setupFileInput('markingSchemeFile', 'markingSchemeFileName');
+
+        // Notification Helper
+        function showNotification(message, isError = true) {
+            const notif = document.getElementById('notification');
+            const msg = document.getElementById('notification-msg');
+            msg.innerText = message;
+            
+            if (isError) {
+                notif.classList.replace('bg-emerald-600', 'bg-red-600');
+            } else {
+                notif.classList.replace('bg-red-600', 'bg-emerald-600');
+            }
+
+            notif.classList.remove('translate-y-20', 'opacity-0');
+            notif.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                notif.classList.add('translate-y-20', 'opacity-0');
+                notif.classList.remove('translate-y-0', 'opacity-100');
+            }, 6000);
+        }
+
+        // Form Submission logic
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const qFile = document.getElementById('questionFile').files[0];
+            const aFile = document.getElementById('answerFile').files[0];
+            const mFile = document.getElementById('markingSchemeFile').files[0];
+
+            if (!qFile || !aFile || !mFile) {
+                showNotification("Please select all 3 files before submitting.");
+                return;
+            }
+
+            navigateTo('loading');
+
+            try {
+                // Using FormData to send actual files to n8n
+                // This is the preferred way for n8n to handle binary data
+                const formData = new FormData();
+                formData.append('studentId', 'AJ-2024-001');
+                formData.append('module', 'EOM');
+                formData.append('questionFile', qFile);
+                formData.append('answerFile', aFile);
+                formData.append('markingSchemeFile', mFile);
+
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    body: formData // Fetch handles Content-Type header automatically for FormData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server Error: ${response.status}`);
+                }
+
+                // If response is valid, parse and render
+                const data = await response.json();
+                renderFeedback(data);
+                navigateTo('feedback');
+                showNotification("Analysis complete!", false);
+
+            } catch (err) {
+                console.error('Submission Error:', err);
+                navigateTo('upload'); // Return to upload so user can try again
+                
+                let errorDetails = "Ensure your n8n workflow is active and has CORS enabled.";
+                if (err.message.includes("Failed to fetch")) {
+                    errorDetails = "Connection blocked (CORS) or server offline.";
+                }
+                
+                showNotification(`Submission Failed: ${err.message}. ${errorDetails}`);
+            }
+        });
+
+        // Dynamic Table Rendering
+        function renderFeedback(data) {
+            const tbody = document.getElementById('feedback-table-body');
+            const emptyState = document.getElementById('empty-feedback');
+            const feedbackSection = document.getElementById('view-feedback');
+            tbody.innerHTML = '';
+
+            const criterionResults = Array.isArray(data?.criterionResults) ? data.criterionResults : [];
+            const taskTotals = Array.isArray(data?.taskTotals) ? data.taskTotals : [];
+            const overallFeedback = data?.overallFeedback || '';
+            const priorityImprovements = Array.isArray(data?.priorityImprovements) ? data.priorityImprovements : [];
+            const overallTotal = data?.overallTotal ?? 0;
+            const overallMax = data?.overallMax ?? 100;
+            const report = data?.report || '';
+
+            const existingSummary = document.getElementById('result-summary');
+            if (existingSummary) existingSummary.remove();
+
+            const existingReport = document.getElementById('plain-report');
+            if (existingReport) existingReport.remove();
+
+            if (!criterionResults.length) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            const summaryBox = document.createElement('div');
+            summaryBox.id = 'result-summary';
+            summaryBox.className = 'mb-6 grid grid-cols-1 lg:grid-cols-3 gap-4';
+            summaryBox.innerHTML = `
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <div class="text-sm text-slate-500 mb-1">Overall Score</div>
+                    <div class="text-3xl font-bold text-slate-900">${overallTotal}/${overallMax}</div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm lg:col-span-2">
+                    <div class="text-sm font-semibold text-slate-700 mb-2">Task Totals</div>
+                    <div class="flex flex-wrap gap-3">
+                        ${taskTotals.length ? taskTotals.map(t => `
+                            <div class="px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                                <span class="font-semibold text-slate-800">${t.task}:</span>
+                                <span class="text-slate-600">${t.total}/${t.max}</span>
+                            </div>
+                        `).join('') : '<p class="text-sm text-slate-500">No task totals provided.</p>'}
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm lg:col-span-2">
+                    <div class="text-sm font-semibold text-slate-700 mb-2">Overall Feedback</div>
+                    <p class="text-sm text-slate-600 leading-6">${overallFeedback || 'No summary feedback provided.'}</p>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <div class="text-sm font-semibold text-slate-700 mb-2">Priority Improvements</div>
+                    ${
+                        priorityImprovements.length
+                        ? `<ul class="list-disc ml-5 text-sm text-slate-600 space-y-1">
+                            ${priorityImprovements.map(item => `<li>${item}</li>`).join('')}
+                           </ul>`
+                        : `<p class="text-sm text-slate-500">No priority improvements provided.</p>`
+                    }
+                </div>
+            `;
+            feedbackSection.insertBefore(summaryBox, feedbackSection.children[1]);
+
+            if (report) {
+                const reportBox = document.createElement('div');
+                reportBox.id = 'plain-report';
+                reportBox.className = 'mb-6 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm';
+                reportBox.innerHTML = `
+                    <div class="text-sm font-semibold text-slate-700 mb-2">Full Report</div>
+                    <pre class="whitespace-pre-wrap text-sm text-slate-600 leading-6">${report}</pre>
+                `;
+                feedbackSection.insertBefore(reportBox, summaryBox.nextSibling);
+            }
+
+            criterionResults.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-slate-50 transition-colors group';
+
+                const mark = Number(item.awardedMark ?? 0);
+                const maxMark = Number(item.maxMark ?? 0);
+
+                let status = 'warning';
+                if (maxMark > 0) {
+                    const ratio = mark / maxMark;
+                    if (ratio >= 0.7) status = 'pass';
+                    else if (ratio >= 0.4) status = 'warning';
+                    else status = 'fail';
+                }
+
+                let statusBadge = '';
+                switch (status) {
+                    case 'pass':
+                        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">GOOD</span>';
+                        break;
+                    case 'fail':
+                        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">WEAK</span>';
+                        break;
+                    default:
+                        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">FAIR</span>';
+                }
+
+                row.innerHTML = `
+                    <td class="py-5 px-6">
+                        <div class="font-semibold text-slate-900">${item.task || 'N/A'}</div>
+                        <div class="text-xs text-slate-500 mt-1">Mark: ${mark}/${maxMark}</div>
+                    </td>
+                    <td class="py-5 px-6 text-sm text-slate-600">${item.criterion || 'N/A'}</td>
+                    <td class="py-5 px-6 text-sm text-slate-700 leading-relaxed">
+                        <div><span class="font-semibold">Justification:</span> ${item.justification || 'No justification.'}</div>
+                        <div class="mt-2"><span class="font-semibold">Improvement:</span> ${item.improvement || 'No suggestion.'}</div>
+                    </td>
+                    <td class="py-5 px-6 text-center">${statusBadge}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
