@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Feedback Portal</title>
+    <title>Student Feedback Portal - EOM Assignment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -22,7 +22,6 @@
             border-color: #3b82f6;
             background-color: #eff6ff;
         }
-        /* Custom scrollbar for table */
         .table-container::-webkit-scrollbar {
             height: 8px;
         }
@@ -36,57 +35,71 @@
         .hidden-view {
             display: none;
         }
+        .debug-console {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            max-height: 300px;
+            background: #1e1e1e;
+            color: #0f0;
+            font-family: monospace;
+            font-size: 11px;
+            padding: 10px;
+            border-radius: 8px;
+            overflow: auto;
+            z-index: 1000;
+            display: none;
+        }
+        .debug-console.show {
+            display: block;
+        }
     </style>
 </head>
 <body class="min-h-screen text-slate-800">
 
-    <!-- Navigation Header -->
+    <div id="debug-console" class="debug-console">
+        <div class="flex justify-between mb-2">
+            <strong>Debug Console</strong>
+            <button onclick="document.getElementById('debug-console').classList.remove('show')" class="text-white">✕</button>
+        </div>
+        <div id="debug-log"></div>
+    </div>
+
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('dashboard')">
                     <div class="bg-blue-600 p-2 rounded-lg">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     </div>
-                    <span class="text-xl font-bold tracking-tight text-slate-900">EduFeedback</span>
-                </div>                
+                    <span class="text-xl font-bold tracking-tight text-slate-900">Assignment Feedback Portal</span>
+                </div>
             </div>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- View 1: Dashboard -->
         <section id="view-dashboard">
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-slate-900">Student Dashboard</h1>
-                <p class="text-slate-500 mt-1">Select a module to manage your assignments.</p>
+                <p class="text-slate-500 mt-1">Select a module to submit your assignment.</p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- EOM Card -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <button onclick="navigateTo('upload')" class="aspect-square bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-4 card-hover hover:border-blue-500 group text-center">
                     <div class="bg-blue-100 p-4 rounded-xl group-hover:bg-blue-600 transition-colors">
                         <svg class="w-10 h-10 text-blue-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
                     <span class="text-xl font-bold text-slate-800">EOM</span>
-                    <span class="text-sm text-slate-400">End of Module Tasks</span>
+                    <span class="text-sm text-slate-400">Essentials of Management</span>
                 </button>
 
-                <!-- Other Placeholders -->
                 <div class="aspect-square bg-white/50 p-8 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-4 opacity-60 grayscale cursor-not-allowed text-center">
                     <div class="bg-slate-100 p-4 rounded-xl">
                         <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <span class="text-xl font-bold text-slate-500">Practice</span>
-                    <span class="text-sm text-slate-400">Locked</span>
-                </div>
-
-                <div class="aspect-square bg-white/50 p-8 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-4 opacity-60 grayscale cursor-not-allowed text-center">
-                    <div class="bg-slate-100 p-4 rounded-xl">
-                        <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012-2"></path></svg>
-                    </div>
-                    <span class="text-xl font-bold text-slate-500">History</span>
+                    <span class="text-xl font-bold text-slate-500">Other Modules</span>
                     <span class="text-sm text-slate-400">Coming Soon</span>
                 </div>
 
@@ -94,13 +107,12 @@
                     <div class="bg-slate-100 p-4 rounded-xl">
                         <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                     </div>
-                    <span class="text-xl font-bold text-slate-500">Lab Reports</span>
+                    <span class="text-xl font-bold text-slate-500">History</span>
                     <span class="text-sm text-slate-400">Locked</span>
                 </div>
             </div>
         </section>
 
-        <!-- View 2: Upload Files -->
         <section id="view-upload" class="hidden-view">
             <div class="flex items-center gap-4 mb-8">
                 <button onclick="navigateTo('dashboard')" class="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-600">
@@ -108,45 +120,48 @@
                 </button>
                 <div>
                     <h1 class="text-2xl font-bold text-slate-900">Submit EOM Assignment</h1>
-                    <p class="text-slate-500">Please upload the question file, your answer file, and the marking scheme file.</p>
+                    <p class="text-slate-500">Upload your answer file (PDF format only). Referencing and word count are now checked more strictly.</p>
+                </div>
+            </div>
+
+            <div class="mb-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+                <h2 class="text-lg font-bold text-blue-900 mb-3">📋 Assignment Questions (Essentials of Management)</h2>
+                <div class="space-y-4 text-sm text-blue-800">
+                    <div>
+                        <p class="font-semibold">Task 1 (25 marks)</p>
+                        <p class="mt-1 ml-4">a) According to Robert L. Katz (1955) managers need essential skills to perform well. Discuss the importance of essential skills using workplace examples and appropriate theories. (10 marks)</p>
+                        <p class="mt-1 ml-4">b) Assess the characteristics of your chosen organisation and decide whether it is more closely aligned with a traditional organisation or a new organisation with a clear rationale. (15 marks)</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold">Task 2 (25 marks)</p>
+                        <p class="mt-1 ml-4">a) Conduct a detailed SWOT analysis on your chosen organisation and identify the main strategic challenges faced. (10 marks)</p>
+                        <p class="mt-1 ml-4">b) Explore in more detail a strategic challenge identified in part (a). Explain the steps in effective strategic goal setting and recommend a course of action. (15 marks)</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold">Task 3 (25 marks)</p>
+                        <p class="mt-1 ml-4">a) Explore how effective budgeting and forecasting techniques enable a manager to allocate and control resources effectively across your chosen business. (15 marks)</p>
+                        <p class="mt-1 ml-4">b) Explain the importance of accurate information and how the results from budgeting and forecasting can aid the decision-making process. (10 marks)</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold">Task 4 (25 marks)</p>
+                        <p class="mt-1 ml-4">a) Identify FIVE of Woodcock's building blocks and explain how they can be used at your chosen organisation to aid effective team performance. (15 marks)</p>
+                        <p class="mt-1 ml-4">b) Discuss the importance of leadership and demonstrate how THREE different leadership styles can be effective using workplace examples. (10 marks)</p>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-blue-200 text-xs text-blue-600">
+                    <span class="font-semibold">⚠️ Note:</span> Your answer will be evaluated against the official marking scheme. Maximum total marks: 100
                 </div>
             </div>
 
             <form id="upload-form" class="space-y-8">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Question File Area -->
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-slate-700">1. Question File</label>
-                        <div class="drop-zone relative border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center bg-white flex flex-col items-center justify-center min-h-[240px]">
-                            <svg class="w-12 h-12 text-blue-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                            <p class="text-slate-600 font-medium">Drag & drop or <span class="text-blue-600 cursor-pointer hover:underline">browse</span></p>
-                            <p class="text-xs text-slate-400 mt-2">Recommended: PDF only</p>
-                            <input type="file" id="questionFile" name="question" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                            <div id="questionFileName" class="mt-4 text-sm font-semibold text-blue-600 hidden"></div>
-                        </div>
-                    </div>
-
-                    <!-- Answer File Area -->
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-slate-700">2. Answer File</label>
-                        <div class="drop-zone relative border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center bg-white flex flex-col items-center justify-center min-h-[240px]">
-                            <svg class="w-12 h-12 text-emerald-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <p class="text-slate-600 font-medium">Drag & drop or <span class="text-emerald-600 cursor-pointer hover:underline">browse</span></p>
-                            <p class="text-xs text-slate-400 mt-2">Upload your completed work</p>
-                            <input type="file" id="answerFile" name="answer" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                            <div id="answerFileName" class="mt-4 text-sm font-semibold text-emerald-600 hidden"></div>
-                        </div>
-                    </div>
-                    <!-- Marking Scheme File Area -->
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-slate-700">3. Marking Scheme File</label>
-                        <div class="drop-zone relative border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center bg-white flex flex-col items-center justify-center min-h-[240px]">
-                            <svg class="w-12 h-12 text-violet-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3-3v6m5 4H7a2 2 0 01-2-2V7a2 2 0 012-2h3l2-2h5a2 2 0 012 2v12a2 2 0 01-2 2z"></path></svg>
-                            <p class="text-slate-600 font-medium">Drag & drop or <span class="text-violet-600 cursor-pointer hover:underline">browse</span></p>
-                            <p class="text-xs text-slate-400 mt-2">Upload the lecturer marking scheme</p>
-                            <input type="file" id="markingSchemeFile" name="markingScheme" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                            <div id="markingSchemeFileName" class="mt-4 text-sm font-semibold text-violet-600 hidden"></div>
-                        </div>
+                <div class="space-y-3">
+                    <label class="block text-sm font-semibold text-slate-700">Your Answer File (PDF only)</label>
+                    <div class="drop-zone relative border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center bg-white flex flex-col items-center justify-center min-h-[240px]">
+                        <svg class="w-12 h-12 text-emerald-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p class="text-slate-600 font-medium">Drag &amp; drop your PDF or <span class="text-emerald-600 cursor-pointer hover:underline">browse</span></p>
+                        <p class="text-xs text-slate-400 mt-2">Only PDF files are accepted</p>
+                        <input type="file" id="answerFile" name="answerFile" class="absolute inset-0 opacity-0 cursor-pointer" accept=".pdf,application/pdf" required>
+                        <div id="answerFileName" class="mt-4 text-sm font-semibold text-emerald-600 hidden"></div>
                     </div>
                 </div>
 
@@ -159,7 +174,6 @@
             </form>
         </section>
 
-        <!-- View 3: Loading State -->
         <section id="view-loading" class="hidden-view text-center py-20">
             <div class="flex flex-col items-center">
                 <div class="relative w-24 h-24 mb-6">
@@ -167,11 +181,11 @@
                     <div class="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
                 </div>
                 <h2 class="text-2xl font-bold text-slate-900 mb-2">Analyzing Your Submission</h2>
-                <p class="text-slate-500 max-w-md mx-auto">Your files are being delivered to the analysis engine...</p>
+                <p class="text-slate-500 max-w-md mx-auto">Your answer is being evaluated against the marking scheme...</p>
+                <p class="text-xs text-slate-400 mt-4">This may take 30-60 seconds</p>
             </div>
         </section>
 
-        <!-- View 4: Feedback Table -->
         <section id="view-feedback" class="hidden-view">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div>
@@ -179,7 +193,7 @@
                     <p class="text-slate-500">Module: EOM Assignment Performance</p>
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="navigateTo('upload')" class="bg-white border border-slate-200 text-slate-700 py-2 px-5 rounded-lg hover:bg-slate-50 transition-colors">Re-submit</button>
+                    <button onclick="navigateTo('upload')" class="bg-white border border-slate-200 text-slate-700 py-2 px-5 rounded-lg hover:bg-slate-50 transition-colors">Submit Another</button>
                     <button onclick="window.print()" class="bg-slate-900 text-white py-2 px-5 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                         Print Report
@@ -198,172 +212,220 @@
                                 <th class="py-4 px-6 font-bold text-slate-700 text-sm uppercase tracking-wider text-center">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="feedback-table-body" class="divide-y divide-slate-100">
-                            <!-- Dynamic rows injected here -->
-                        </tbody>
+                        <tbody id="feedback-table-body" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
-            
+
             <div id="empty-feedback" class="hidden text-center py-20 bg-white rounded-2xl border-2 border-dashed border-slate-200 mt-4">
                 <p class="text-slate-500">No feedback data available. Please try submitting again.</p>
             </div>
         </section>
-
     </main>
 
-    <!-- UI Message Notifications -->
     <div id="notification" class="fixed bottom-8 right-8 transform translate-y-20 opacity-0 transition-all duration-500 z-[100] bg-red-600 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
-        <svg id="notif-icon-error" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         <span id="notification-msg">Error occurred</span>
     </div>
 
     <script>
-        // Configuration
-        const WEBHOOK_URL = 'https://n8n.srv1326411.hstgr.cloud/webhook/assignment-check'; 
+        const WEBHOOK_URL = 'https://n8n.srv1326411.hstgr.cloud/webhook/assignment-check';
 
-        // State Manager
+        let debugLogs = [];
+        function debugLog(message, data = null) {
+            const timestamp = new Date().toLocaleTimeString();
+            const suffix = data === null ? '' : ': ' + (typeof data === 'string' ? data : JSON.stringify(data, null, 2));
+            const logEntry = `[${timestamp}] ${message}${suffix}`;
+            debugLogs.unshift(logEntry);
+            if (debugLogs.length > 25) debugLogs.pop();
+
+            const debugDiv = document.getElementById('debug-log');
+            if (debugDiv) {
+                debugDiv.innerHTML = debugLogs.map(log => `<div style="border-bottom:1px solid #333;padding:4px 0;white-space:pre-wrap;">${escapeHtml(log)}</div>`).join('');
+            }
+            console.log(message, data || '');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                document.getElementById('debug-console').classList.toggle('show');
+            }
+        });
+
         function navigateTo(viewId) {
-            const views = ['dashboard', 'upload', 'loading', 'feedback'];
-            views.forEach(v => {
+            ['dashboard', 'upload', 'loading', 'feedback'].forEach(v => {
                 const el = document.getElementById(`view-${v}`);
-                if (v === viewId) {
-                    el.classList.remove('hidden-view');
-                } else {
-                    el.classList.add('hidden-view');
-                }
+                if (!el) return;
+                el.classList.toggle('hidden-view', v !== viewId);
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Handle File Input UI Updates
-        const setupFileInput = (inputId, displayId) => {
-            const input = document.getElementById(inputId);
-            const display = document.getElementById(displayId);
-            const dropZone = input.parentElement;
+        const answerInput = document.getElementById('answerFile');
+        const answerDisplay = document.getElementById('answerFileName');
 
-            input.addEventListener('change', (e) => {
-                if (input.files.length > 0) {
-                    display.innerText = `Selected: ${input.files[0].name}`;
-                    display.classList.remove('hidden');
-                    dropZone.classList.add('border-blue-500', 'bg-blue-50');
-                }
-            });
+        answerInput.addEventListener('change', () => {
+            const file = answerInput.files[0];
+            if (!file) {
+                answerDisplay.classList.add('hidden');
+                answerDisplay.textContent = '';
+                return;
+            }
+            if (file.type !== 'application/pdf') {
+                showNotification('Only PDF files are accepted. Please upload a PDF file.');
+                answerInput.value = '';
+                answerDisplay.classList.add('hidden');
+                return;
+            }
+            answerDisplay.innerText = `Selected: ${file.name}`;
+            answerDisplay.classList.remove('hidden');
+        });
 
-            ['dragover', 'dragleave', 'drop'].forEach(evt => {
-                dropZone.addEventListener(evt, (e) => {
-                    e.preventDefault();
-                    if (evt === 'dragover') dropZone.classList.add('drop-zone--over');
-                    else dropZone.classList.remove('drop-zone--over');
-                });
-            });
-        };
-
-        setupFileInput('questionFile', 'questionFileName');
-        setupFileInput('answerFile', 'answerFileName');
-        setupFileInput('markingSchemeFile', 'markingSchemeFileName');
-
-        // Notification Helper
         function showNotification(message, isError = true) {
             const notif = document.getElementById('notification');
             const msg = document.getElementById('notification-msg');
             msg.innerText = message;
-            
-            if (isError) {
-                notif.classList.replace('bg-emerald-600', 'bg-red-600');
-            } else {
-                notif.classList.replace('bg-red-600', 'bg-emerald-600');
-            }
 
+            notif.classList.remove('bg-emerald-600', 'bg-red-600');
+            notif.classList.add(isError ? 'bg-red-600' : 'bg-emerald-600');
             notif.classList.remove('translate-y-20', 'opacity-0');
             notif.classList.add('translate-y-0', 'opacity-100');
-            
+
             setTimeout(() => {
                 notif.classList.add('translate-y-20', 'opacity-0');
                 notif.classList.remove('translate-y-0', 'opacity-100');
             }, 6000);
         }
 
-        // Form Submission logic
         document.getElementById('upload-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const qFile = document.getElementById('questionFile').files[0];
-            const aFile = document.getElementById('answerFile').files[0];
-            const mFile = document.getElementById('markingSchemeFile').files[0];
 
-            if (!qFile || !aFile || !mFile) {
-                showNotification("Please select all 3 files before submitting.");
+            const aFile = answerInput.files[0];
+            if (!aFile) {
+                showNotification('Please select your answer file (PDF) before submitting.');
+                return;
+            }
+            if (aFile.type !== 'application/pdf') {
+                showNotification('Only PDF files are accepted. Please upload a PDF file.');
                 return;
             }
 
+            debugLog('Starting submission', { fileName: aFile.name, fileSize: aFile.size, webhook: WEBHOOK_URL });
             navigateTo('loading');
 
             try {
-                // Using FormData to send actual files to n8n
-                // This is the preferred way for n8n to handle binary data
                 const formData = new FormData();
-                formData.append('studentId', 'AJ-2024-001');
-                formData.append('module', 'EOM');
-                formData.append('questionFile', qFile);
                 formData.append('answerFile', aFile);
-                formData.append('markingSchemeFile', mFile);
 
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
-                    body: formData // Fetch handles Content-Type header automatically for FormData
+                    body: formData,
                 });
 
+                const rawText = await response.text();
+                debugLog('Response status', response.status);
+                debugLog('Raw response text', rawText.slice(0, 4000));
+
                 if (!response.ok) {
-                    throw new Error(`Server Error: ${response.status}`);
+                    throw new Error(`HTTP ${response.status}: ${rawText || response.statusText}`);
                 }
 
-                // If response is valid, parse and render
-                const data = await response.json();
-                renderFeedback(data);
+                let data;
+                try {
+                    data = JSON.parse(rawText);
+                } catch (parseError) {
+                    throw new Error('Server did not return valid JSON');
+                }
+
+                debugLog('Parsed response', data);
+
+                if (!data || typeof data !== 'object') {
+                    throw new Error('Invalid response format from server');
+                }
+
+                if (data.success === false) {
+                    throw new Error(data.message || 'Workflow reported failure');
+                }
+
+                // Normalize the response fields - handle both snake_case and camelCase
+                const normalizedData = {
+                    criterionResults: data.criterion_results || data.criterionResults || [],
+                    overallFeedback: data.overallFeedback || data.overall_feedback || '',
+                    priorityImprovements: data.priorityImprovements || data.priority_improvements || [],
+                    taskTotals: data.taskTotals || data.task_totals || [],
+                    overallTotal: data.overallTotal || data.overall_total || 0,
+                    overallMax: data.overallMax || data.overall_max || 100,
+                    report: data.report || '',
+                    message: data.message || '',
+                    wordCount: data.wordCount || data.word_count || 0,
+                    success: data.success
+                };
+
+                if (!Array.isArray(normalizedData.criterionResults) || normalizedData.criterionResults.length === 0) {
+                    debugLog('Warning: No criterion results found', normalizedData);
+                    throw new Error('No criterion results returned from the workflow. Please check the LLM output format.');
+                }
+
+                renderFeedback(normalizedData);
                 navigateTo('feedback');
-                showNotification("Analysis complete!", false);
-
+                showNotification('Analysis complete!', false);
             } catch (err) {
+                debugLog('Submission error', { message: err.message, stack: err.stack });
                 console.error('Submission Error:', err);
-                navigateTo('upload'); // Return to upload so user can try again
-                
-                let errorDetails = "Ensure your n8n workflow is active and has CORS enabled.";
-                if (err.message.includes("Failed to fetch")) {
-                    errorDetails = "Connection blocked (CORS) or server offline.";
-                }
-                
-                showNotification(`Submission Failed: ${err.message}. ${errorDetails}`);
+                navigateTo('upload');
+                showNotification(`Submission Failed: ${err.message}`);
             }
         });
 
-        // Dynamic Table Rendering
         function renderFeedback(data) {
+            debugLog('Rendering feedback', data);
+
             const tbody = document.getElementById('feedback-table-body');
             const emptyState = document.getElementById('empty-feedback');
             const feedbackSection = document.getElementById('view-feedback');
+            if (!tbody || !feedbackSection) return;
+
             tbody.innerHTML = '';
 
-            const criterionResults = Array.isArray(data?.criterionResults) ? data.criterionResults : [];
-            const taskTotals = Array.isArray(data?.taskTotals) ? data.taskTotals : [];
-            const overallFeedback = data?.overallFeedback || '';
-            const priorityImprovements = Array.isArray(data?.priorityImprovements) ? data.priorityImprovements : [];
-            const overallTotal = data?.overallTotal ?? 0;
-            const overallMax = data?.overallMax ?? 100;
-            const report = data?.report || '';
+            const criterionResults = Array.isArray(data.criterionResults) ? data.criterionResults : [];
+            const taskTotals = Array.isArray(data.taskTotals) ? data.taskTotals : [];
+            const overallFeedback = data.overallFeedback || '';
+            const priorityImprovements = Array.isArray(data.priorityImprovements) ? data.priorityImprovements : [];
+            const overallTotal = Number(data.overallTotal || 0);
+            const overallMax = Number(data.overallMax || 100);
+            const report = data.report || '';
+            const errorMessage = data.message || '';
+            const wordCount = data.wordCount || 0;
 
+            // Remove existing summary boxes if they exist
             const existingSummary = document.getElementById('result-summary');
-            if (existingSummary) existingSummary.remove();
-
             const existingReport = document.getElementById('plain-report');
+            if (existingSummary) existingSummary.remove();
             if (existingReport) existingReport.remove();
 
             if (!criterionResults.length) {
                 emptyState.classList.remove('hidden');
+
+                const summaryBox = document.createElement('div');
+                summaryBox.id = 'result-summary';
+                summaryBox.className = 'mb-6 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm';
+                summaryBox.innerHTML = `
+                    <div class="text-sm font-semibold text-slate-700 mb-2">Workflow Response</div>
+                    <p class="text-sm text-slate-600">${escapeHtml(errorMessage || 'No criterion results were returned by the workflow.')}</p>
+                    <pre class="mt-4 text-xs bg-slate-50 p-3 rounded overflow-auto">${escapeHtml(JSON.stringify(data, null, 2))}</pre>
+                `;
+                feedbackSection.insertBefore(summaryBox, feedbackSection.children[1]);
                 return;
-            } else {
-                emptyState.classList.add('hidden');
             }
+
+            emptyState.classList.add('hidden');
+
+            // Calculate reference audit from the answer text if available
+            const referenceAudit = {
+                hasInTextCitations: false,
+                hasReferenceList: false,
+                citationCount: 0,
+                referenceStrength: 'unknown'
+            };
 
             const summaryBox = document.createElement('div');
             summaryBox.id = 'result-summary';
@@ -372,34 +434,29 @@
                 <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
                     <div class="text-sm text-slate-500 mb-1">Overall Score</div>
                     <div class="text-3xl font-bold text-slate-900">${overallTotal}/${overallMax}</div>
+                    <div class="text-xs text-slate-400 mt-1">${overallMax > 0 ? Math.round((overallTotal / overallMax) * 100) : 0}%</div>
+                    <!-- <div class="text-xs text-slate-500 mt-2">Word Count: ${wordCount}</div> -->
                 </div>
-
                 <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm lg:col-span-2">
                     <div class="text-sm font-semibold text-slate-700 mb-2">Task Totals</div>
                     <div class="flex flex-wrap gap-3">
                         ${taskTotals.length ? taskTotals.map(t => `
                             <div class="px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm">
-                                <span class="font-semibold text-slate-800">${t.task}:</span>
-                                <span class="text-slate-600">${t.total}/${t.max}</span>
+                                <span class="font-semibold text-slate-800">${escapeHtml(t.task || 'Task')}:</span>
+                                <span class="text-slate-600">${Number(t.total || 0)}/${Number(t.max || 25)}</span>
                             </div>
                         `).join('') : '<p class="text-sm text-slate-500">No task totals provided.</p>'}
                     </div>
                 </div>
-
-                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm lg:col-span-2">
-                    <div class="text-sm font-semibold text-slate-700 mb-2">Overall Feedback</div>
-                    <p class="text-sm text-slate-600 leading-6">${overallFeedback || 'No summary feedback provided.'}</p>
-                </div>
-
                 <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <div class="text-sm font-semibold text-slate-700 mb-2">Overall Feedback</div>
+                    <p class="text-sm text-slate-600 leading-6">${escapeHtml(overallFeedback) || 'No summary feedback provided.'}</p>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm lg:col-span-2">
                     <div class="text-sm font-semibold text-slate-700 mb-2">Priority Improvements</div>
-                    ${
-                        priorityImprovements.length
-                        ? `<ul class="list-disc ml-5 text-sm text-slate-600 space-y-1">
-                            ${priorityImprovements.map(item => `<li>${item}</li>`).join('')}
-                           </ul>`
-                        : `<p class="text-sm text-slate-500">No priority improvements provided.</p>`
-                    }
+                    ${priorityImprovements.length
+                        ? `<ul class="list-disc ml-5 text-sm text-slate-600 space-y-1">${priorityImprovements.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
+                        : `<p class="text-sm text-slate-500">No priority improvements provided.</p>`}
                 </div>
             `;
             feedbackSection.insertBefore(summaryBox, feedbackSection.children[1]);
@@ -410,52 +467,45 @@
                 reportBox.className = 'mb-6 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm';
                 reportBox.innerHTML = `
                     <div class="text-sm font-semibold text-slate-700 mb-2">Full Report</div>
-                    <pre class="whitespace-pre-wrap text-sm text-slate-600 leading-6">${report}</pre>
+                    <pre class="whitespace-pre-wrap text-sm text-slate-600 leading-6 font-mono bg-slate-50 p-4 rounded-lg max-h-96 overflow-auto">${escapeHtml(report)}</pre>
                 `;
                 feedbackSection.insertBefore(reportBox, summaryBox.nextSibling);
             }
 
-            criterionResults.forEach(item => {
+            criterionResults.forEach((item) => {
                 const row = document.createElement('tr');
-                row.className = 'hover:bg-slate-50 transition-colors group';
+                row.className = 'hover:bg-slate-50 transition-colors';
 
-                const mark = Number(item.awardedMark ?? 0);
-                const maxMark = Number(item.maxMark ?? 0);
-
-                let status = 'warning';
-                if (maxMark > 0) {
-                    const ratio = mark / maxMark;
-                    if (ratio >= 0.7) status = 'pass';
-                    else if (ratio >= 0.4) status = 'warning';
-                    else status = 'fail';
-                }
-
-                let statusBadge = '';
-                switch (status) {
-                    case 'pass':
-                        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">GOOD</span>';
-                        break;
-                    case 'fail':
-                        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">WEAK</span>';
-                        break;
-                    default:
-                        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">FAIR</span>';
-                }
+                const mark = Number(item.awardedMark || item.awarded_mark || 0);
+                const maxMark = Number(item.maxMark || item.max_mark || 0);
+                const ratio = maxMark > 0 ? mark / maxMark : 0;
+                const statusBadge = ratio >= 0.7
+                    ? '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">GOOD</span>'
+                    : ratio >= 0.4
+                        ? '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">FAIR</span>'
+                        : '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">WEAK</span>';
 
                 row.innerHTML = `
-                    <td class="py-5 px-6">
-                        <div class="font-semibold text-slate-900">${item.task || 'N/A'}</div>
+                    <td class="py-5 px-6 align-top">
+                        <div class="font-semibold text-slate-900">${escapeHtml(item.task || 'N/A')}</div>
                         <div class="text-xs text-slate-500 mt-1">Mark: ${mark}/${maxMark}</div>
                     </td>
-                    <td class="py-5 px-6 text-sm text-slate-600">${item.criterion || 'N/A'}</td>
-                    <td class="py-5 px-6 text-sm text-slate-700 leading-relaxed">
-                        <div><span class="font-semibold">Justification:</span> ${item.justification || 'No justification.'}</div>
-                        <div class="mt-2"><span class="font-semibold">Improvement:</span> ${item.improvement || 'No suggestion.'}</div>
+                    <td class="py-5 px-6 text-sm text-slate-600 align-top">${escapeHtml(item.criterion || 'N/A')}</td>
+                    <td class="py-5 px-6 text-sm text-slate-700 leading-relaxed align-top">
+                        <div><span class="font-semibold">Justification:</span> ${escapeHtml(item.justification || 'No justification.')}</div>
+                        <div class="mt-2"><span class="font-semibold">Improvement:</span> ${escapeHtml(item.improvement || 'No suggestion.')}</div>
                     </td>
-                    <td class="py-5 px-6 text-center">${statusBadge}</td>
+                    <td class="py-5 px-6 text-center align-top">${statusBadge}</td>
                 `;
                 tbody.appendChild(row);
             });
+        }
+
+        function escapeHtml(text) {
+            if (text === null || text === undefined) return '';
+            const div = document.createElement('div');
+            div.textContent = String(text);
+            return div.innerHTML;
         }
     </script>
 </body>
