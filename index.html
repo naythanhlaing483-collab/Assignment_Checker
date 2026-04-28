@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Feedback Portal - EOM Assignment</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -120,7 +121,7 @@
                 </button>
                 <div>
                     <h1 class="text-2xl font-bold text-slate-900">Submit EOM Assignment</h1>
-                    <p class="text-slate-500">Upload your answer file (PDF format only). Referencing and word count are now checked more strictly.</p>
+                    <p class="text-slate-500">Upload your answer file (Word DOCX format only). Referencing and word count are now checked more strictly.</p>
                 </div>
             </div>
 
@@ -155,12 +156,12 @@
 
             <form id="upload-form" class="space-y-8">
                 <div class="space-y-3">
-                    <label class="block text-sm font-semibold text-slate-700">Your Answer File (PDF only)</label>
+                    <label class="block text-sm font-semibold text-slate-700">Your Answer File (Word DOCX only)</label>
                     <div class="drop-zone relative border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center bg-white flex flex-col items-center justify-center min-h-[240px]">
                         <svg class="w-12 h-12 text-emerald-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <p class="text-slate-600 font-medium">Drag &amp; drop your PDF or <span class="text-emerald-600 cursor-pointer hover:underline">browse</span></p>
-                        <p class="text-xs text-slate-400 mt-2">Only PDF files are accepted</p>
-                        <input type="file" id="answerFile" name="answerFile" class="absolute inset-0 opacity-0 cursor-pointer" accept=".pdf,application/pdf" required>
+                        <p class="text-slate-600 font-medium">Drag &amp; drop your Word DOCX file or <span class="text-emerald-600 cursor-pointer hover:underline">browse</span></p>
+                        <p class="text-xs text-slate-400 mt-2">Only Word DOCX files are accepted</p>
+                        <input type="file" id="answerFile" name="answerFile" class="absolute inset-0 opacity-0 cursor-pointer" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
                         <div id="answerFileName" class="mt-4 text-sm font-semibold text-emerald-600 hidden"></div>
                     </div>
                 </div>
@@ -194,6 +195,10 @@
                 </div>
                 <div class="flex gap-3">
                     <button onclick="navigateTo('upload')" class="bg-white border border-slate-200 text-slate-700 py-2 px-5 rounded-lg hover:bg-slate-50 transition-colors">Submit Another</button>
+                    <button onclick="downloadExcelReport()" id="download-excel-btn" class="bg-emerald-600 text-white py-2 px-5 rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0120 6.414V19a2 2 0 01-2 2z"></path></svg>
+                        Download Excel
+                    </button>
                     <button onclick="window.print()" class="bg-slate-900 text-white py-2 px-5 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                         Print Report
@@ -231,6 +236,7 @@
         const WEBHOOK_URL = 'https://n8n.srv1326411.hstgr.cloud/webhook/assignment-check';
 
         let debugLogs = [];
+        let lastFeedbackData = null;
         function debugLog(message, data = null) {
             const timestamp = new Date().toLocaleTimeString();
             const suffix = data === null ? '' : ': ' + (typeof data === 'string' ? data : JSON.stringify(data, null, 2));
@@ -270,8 +276,8 @@
                 answerDisplay.textContent = '';
                 return;
             }
-            if (file.type !== 'application/pdf') {
-                showNotification('Only PDF files are accepted. Please upload a PDF file.');
+            if (file.type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && !file.name.toLowerCase().endsWith('.docx')) {
+                showNotification('Only Word DOCX files are accepted. Please upload a DOCX file.');
                 answerInput.value = '';
                 answerDisplay.classList.add('hidden');
                 return;
@@ -301,11 +307,11 @@
 
             const aFile = answerInput.files[0];
             if (!aFile) {
-                showNotification('Please select your answer file (PDF) before submitting.');
+                showNotification('Please select your answer file (DOCX) before submitting.');
                 return;
             }
-            if (aFile.type !== 'application/pdf') {
-                showNotification('Only PDF files are accepted. Please upload a PDF file.');
+            if (aFile.type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && !aFile.name.toLowerCase().endsWith('.docx')) {
+                showNotification('Only Word DOCX files are accepted. Please upload a DOCX file.');
                 return;
             }
 
@@ -357,6 +363,9 @@
                     report: data.report || '',
                     message: data.message || '',
                     wordCount: data.wordCount || data.word_count || 0,
+                    studentName: data.studentName || data.student_name || '',
+                    studentId: data.studentId || data.student_id || '',
+                    excelExport: data.excelExport || data.excel_export || null,
                     success: data.success
                 };
 
@@ -378,6 +387,9 @@
 
         function renderFeedback(data) {
             debugLog('Rendering feedback', data);
+            lastFeedbackData = data;
+            const excelBtn = document.getElementById('download-excel-btn');
+            if (excelBtn) excelBtn.disabled = !data.excelExport;
 
             const tbody = document.getElementById('feedback-table-body');
             const emptyState = document.getElementById('empty-feedback');
@@ -435,7 +447,8 @@
                     <div class="text-sm text-slate-500 mb-1">Overall Score</div>
                     <div class="text-3xl font-bold text-slate-900">${overallTotal}/${overallMax}</div>
                     <div class="text-xs text-slate-400 mt-1">${overallMax > 0 ? Math.round((overallTotal / overallMax) * 100) : 0}%</div>
-                    <!-- <div class="text-xs text-slate-500 mt-2">Word Count: ${wordCount}</div> -->
+                    <div class="text-xs text-slate-500 mt-2">Name: ${escapeHtml(data.studentName || 'Not found')}</div>
+                    <div class="text-xs text-slate-500">ID: ${escapeHtml(data.studentId || 'Not found')}</div>
                 </div>
                 <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm lg:col-span-2">
                     <div class="text-sm font-semibold text-slate-700 mb-2">Task Totals</div>
@@ -500,6 +513,118 @@
                 tbody.appendChild(row);
             });
         }
+
+        function setCellValue(ws, cellAddress, value) {
+            if (!ws[cellAddress]) ws[cellAddress] = { t: 's', v: '' };
+            if (typeof value === 'number') {
+                ws[cellAddress].t = 'n';
+                ws[cellAddress].v = value;
+            } else {
+                ws[cellAddress].t = 's';
+                ws[cellAddress].v = value || '';
+            }
+        }
+
+        function buildFallbackWorkbook(excelExport) {
+            const aoa = [
+                ['Autumn 2025 - Essentials of Management Marking Scheme', '', '', '', ''],
+                ['Student Name:', excelExport.studentName || '', 'Student ID:', excelExport.studentId || '', ''],
+                ['Task', 'Guideline', 'Max', 'Marks Awarded', 'Remark'],
+                ['', '', 'Marks', '', ''],
+                ['1 (a)', 'Explanation the importance and application of essential skills to chosen organisation', 4, '', ''],
+                ['', 'Using the workplace examples to demonstrate a practical understanding', 6, '', ''],
+                ['1 (b)', 'Identifying the characteristics of chosen organisation', 5, '', ''],
+                ['', 'Explanation of traditional organisation and modern organisation', 4, '', ''],
+                ['', 'Rational evaluation: The chosen organisation is aligned with a traditional organisation or a new organisation', 6, '', ''],
+                ['Task-1', '', 25, '', ''],
+                ['2 (a)', 'Conducting a detailed SWOT analysis on the chosen organisation', 6, '', ''],
+                ['', 'Identifying the main strategic challenges faced', 4, '', ''],
+                ['2 (b)', 'Exploration about more detail of a strategic challenge in the chosen organisation', 4, '', ''],
+                ['', 'Explanation of the steps in effective strategic goal setting', 5, '', ''],
+                ['', 'Recommendation on a course of action to resolve the strategic challenge', 6, '', ''],
+                ['Task-2', '', 25, '', ''],
+                ['3(a)', 'Exploration of how budgeting enables a manager to allocate and control resources', 5, '', ''],
+                ['', 'Exploration of how forecasting techniques enable a manager to allocate and control resources.', 5, '', ''],
+                ['', 'Application to chosen organisation', 5, '', ''],
+                ['3 (b)', 'Explanation of the importance of accurate information can aid the decision-making process', 4, '', ''],
+                ['', 'Understanding how the results of budgeting and forecasting can aid decision making', 6, '', ''],
+                ['Task-3', '', 25, '', ''],
+                ['4(a)', "Identification of Five of Woodcock's building blocks", 5, '', ''],
+                ['', 'Explanation of the application of the building blocks at the chosen organisation to aid team performance', 5, '', ''],
+                ['', 'The use of workplace examples in the explanation', 5, '', ''],
+                ['4(b)', 'Discussion of the importance of leadership to the chosen organisation', 2, '', ''],
+                ['', 'Sufficient application of an appropriate leadership model', 2, '', ''],
+                ['', 'Demonstration of how effective leadership styles (Three different styles) can be used in the chosen organisation with specific examples', 6, '', ''],
+                ['Task-4', '', 25, '', ''],
+                ['Total Marks from Task 1 to Task 4', '', 100, '', ''],
+                ['', '', '', '', ''],
+                ['', '', '', '', ''],
+                ['', 'Marker Comment:', '', '', ''],
+                ['', excelExport.markerComment || '', '', '', '']
+            ];
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(aoa);
+            ws['!cols'] = [{ wch: 14 }, { wch: 78 }, { wch: 10 }, { wch: 14 }, { wch: 70 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+            return wb;
+        }
+
+        function fillExcelWorkbook(wb, excelExport) {
+            const wsName = wb.SheetNames[0];
+            const ws = wb.Sheets[wsName];
+
+            setCellValue(ws, 'B2', excelExport.studentName || '');
+            setCellValue(ws, 'D2', excelExport.studentId || '');
+
+            (excelExport.rows || []).forEach(row => {
+                if (!row.excelRow) return;
+                setCellValue(ws, `D${row.excelRow}`, Number(row.awardedMark || 0));
+                setCellValue(ws, `E${row.excelRow}`, row.remark || '');
+            });
+
+            (excelExport.taskTotals || []).forEach(t => {
+                if (t.excelRow) setCellValue(ws, `D${t.excelRow}`, Number(t.total || 0));
+            });
+
+            setCellValue(ws, 'D30', Number(excelExport.overallTotal || 0));
+            setCellValue(ws, 'B33', 'Marker Comment:');
+            setCellValue(ws, 'B34', excelExport.markerComment || '');
+
+            ws['!cols'] = ws['!cols'] || [{ wch: 14 }, { wch: 78 }, { wch: 10 }, { wch: 14 }, { wch: 70 }];
+            return wb;
+        }
+
+        async function downloadExcelReport() {
+            if (!lastFeedbackData || !lastFeedbackData.excelExport) {
+                showNotification('Excel export data is not available yet.');
+                return;
+            }
+
+            if (typeof XLSX === 'undefined') {
+                showNotification('Excel library did not load. Please check your internet connection and try again.');
+                return;
+            }
+
+            const excelExport = lastFeedbackData.excelExport;
+            let workbook;
+
+            try {
+                const templateResponse = await fetch('./EOM Marking Scheme 2024.xlsx');
+                if (!templateResponse.ok) throw new Error('Template file not found beside index.html');
+                const arrayBuffer = await templateResponse.arrayBuffer();
+                workbook = XLSX.read(arrayBuffer, { type: 'array', cellStyles: true });
+                debugLog('Loaded Excel template for export');
+            } catch (templateError) {
+                debugLog('Template load failed, using fallback workbook', templateError.message);
+                workbook = buildFallbackWorkbook(excelExport);
+            }
+
+            workbook = fillExcelWorkbook(workbook, excelExport);
+            const fileName = excelExport.outputFileName || 'EOM_Marking_Scheme_Completed.xlsx';
+            XLSX.writeFile(workbook, fileName);
+            showNotification('Excel file downloaded.', false);
+        }
+
 
         function escapeHtml(text) {
             if (text === null || text === undefined) return '';
