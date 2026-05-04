@@ -115,36 +115,74 @@
 
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] gap-6 items-start">
+            <aside class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 lg:sticky lg:top-24">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Navigation</div>
+                <nav class="space-y-2">
+                    <button id="sidebar-dashboard-btn" onclick="navigateTo('dashboard')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-900 text-white text-left font-semibold transition-colors">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 13h6V4H4v9zm10 7h6V4h-6v16zM4 20h6v-5H4v5z"></path></svg>
+                        <span>Dashboard</span>
+                    </button>
+                    <button id="sidebar-upload-btn" onclick="navigateTo('upload')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-blue-50 hover:text-blue-700 text-left font-semibold transition-colors">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span>
+                            <span class="block">EOM</span>
+                            <span class="block text-xs font-normal opacity-70">Submit assignment</span>
+                        </span>
+                    </button>
+                    <button disabled class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 bg-slate-50 text-left font-semibold cursor-not-allowed">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>
+                            <span class="block">Other Modules</span>
+                            <span class="block text-xs font-normal opacity-70">Coming soon</span>
+                        </span>
+                    </button>
+                </nav>
+            </aside>
+
+            <div class="min-w-0">
         <section id="view-dashboard">
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-slate-900">Student Dashboard</h1>
-                <p class="text-slate-500 mt-1">Select a module to submit your assignment.</p>
+            <div class="mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-5">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-900">System Dashboard</h1>
+                    <p class="text-slate-500 mt-1">Monitor checked assignments, rankings, and common student mistakes.</p>
+                </div>
+                <div class="w-full lg:w-[420px]">
+                    <label for="dashboard-search" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Search student</label>
+                    <div class="relative">
+                        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input id="dashboard-search" oninput="renderDashboardOverview()" type="search" placeholder="Search by name or student ID" class="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 bg-white shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <button onclick="navigateTo('upload')" class="aspect-square bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-4 card-hover hover:border-blue-500 group text-center">
-                    <div class="bg-blue-100 p-4 rounded-xl group-hover:bg-blue-600 transition-colors">
-                        <svg class="w-10 h-10 text-blue-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex items-center justify-between gap-3">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-900">Latest Checked Results</h2>
+                            <p class="text-xs text-slate-500 mt-1">Newest five matching submissions.</p>
+                        </div>
+                        <button onclick="loadHistory(true)" class="shrink-0 px-3 py-2 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700">Refresh</button>
                     </div>
-                    <span class="text-xl font-bold text-slate-800">EOM</span>
-                    <span class="text-sm text-slate-400">Essentials of Management</span>
-                </button>
+                    <div id="dashboard-latest-list" class="p-4 space-y-3 min-h-[280px]"></div>
+                </section>
 
-                <div class="aspect-square bg-white/50 p-8 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-4 opacity-60 grayscale cursor-not-allowed text-center">
-                    <div class="bg-slate-100 p-4 rounded-xl">
-                        <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100">
+                        <h2 class="text-lg font-bold text-slate-900">Overall Ranking</h2>
+                        <p class="text-xs text-slate-500 mt-1">Sorted by percentage score.</p>
                     </div>
-                    <span class="text-xl font-bold text-slate-500">Other Modules</span>
-                    <span class="text-sm text-slate-400">Coming Soon</span>
-                </div>
+                    <div id="dashboard-ranking-list" class="p-4 space-y-3 min-h-[280px]"></div>
+                </section>
 
-                <button onclick="openHistorySidebar()" class="aspect-square bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-4 card-hover hover:border-slate-900 group text-center">
-                    <div class="bg-slate-100 p-4 rounded-xl group-hover:bg-slate-900 transition-colors">
-                        <svg class="w-10 h-10 text-slate-500 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden xl:col-span-2">
+                    <div class="p-5 border-b border-slate-100">
+                        <h2 class="text-lg font-bold text-slate-900">Common Mistakes</h2>
+                        <p class="text-xs text-slate-500 mt-1">Simple view of where students need the most help.</p>
                     </div>
-                    <span class="text-xl font-bold text-slate-800">History</span>
-                    <span class="text-sm text-slate-400">View saved feedback</span>
-                </button>
+                    <div id="dashboard-mistake-chart" class="p-4 min-h-[280px]"></div>
+                </section>
             </div>
         </section>
 
@@ -260,6 +298,8 @@
                 <p class="text-slate-500">No feedback data available. Please try submitting again.</p>
             </div>
         </section>
+            </div>
+        </div>
     </main>
 
     <div id="notification" class="fixed bottom-8 right-8 transform translate-y-20 opacity-0 transition-all duration-500 z-[100] bg-red-600 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
@@ -312,6 +352,218 @@
             };
         }
 
+        function getRecordSummary(record) {
+            const overview = record.overview || {};
+            const normalized = normalizeWorkflowData(record.result || {});
+            const scoreParts = typeof overview.score === 'string' ? overview.score.split('/') : [];
+            const total = Number(record.overall_total ?? normalized.overallTotal ?? scoreParts[0] ?? 0);
+            const max = Number(record.overall_max ?? normalized.overallMax ?? scoreParts[1] ?? 100) || 100;
+            const percent = max > 0 ? Math.round((total / max) * 100) : 0;
+
+            return {
+                name: record.student_name || normalized.studentName || overview.studentName || 'Unknown Student',
+                id: record.student_id || normalized.studentId || overview.studentId || 'No ID',
+                total,
+                max,
+                percent,
+                date: record.created_at ? new Date(record.created_at) : null,
+                preview: overview.feedbackPreview || normalized.overallFeedback || record.message || 'Click to view detailed feedback.',
+                normalized
+            };
+        }
+
+        function getDashboardRecords() {
+            const query = (document.getElementById('dashboard-search')?.value || '').toLowerCase().trim();
+            return historyRecords.filter(record => {
+                if (!query) return true;
+                const summary = getRecordSummary(record);
+                return [summary.name, summary.id].join(' ').toLowerCase().includes(query);
+            });
+        }
+
+        function renderDashboardEmpty(container, message) {
+            if (!container) return;
+            container.innerHTML = `
+                <div class="h-full min-h-[220px] flex items-center justify-center text-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 px-6">
+                    <p class="text-sm text-slate-500">${escapeHtml(message)}</p>
+                </div>
+            `;
+        }
+
+        function renderDashboardLoading() {
+            ['dashboard-latest-list', 'dashboard-ranking-list', 'dashboard-mistake-chart'].forEach(id => {
+                const container = document.getElementById(id);
+                if (!container) return;
+                container.innerHTML = `
+                    <div class="h-full min-h-[220px] flex items-center justify-center text-center rounded-xl border border-slate-200 bg-slate-50 px-6">
+                        <p class="text-sm text-slate-500">Loading dashboard data...</p>
+                    </div>
+                `;
+            });
+        }
+
+        function openDashboardRecord(index) {
+            const record = historyRecords[index];
+            if (!record) return;
+            const normalized = normalizeWorkflowData(record.result || {});
+            if (!normalized.criterionResults.length && record.overview) {
+                normalized.studentName = record.student_name || record.overview.studentName || '';
+                normalized.studentId = record.student_id || record.overview.studentId || '';
+                normalized.overallTotal = record.overall_total || 0;
+                normalized.overallMax = record.overall_max || 100;
+                normalized.wordCount = record.word_count || 0;
+                normalized.message = record.message || '';
+            }
+            renderFeedback(normalized);
+            navigateTo('feedback');
+        }
+
+        function renderDashboardOverview() {
+            const latestContainer = document.getElementById('dashboard-latest-list');
+            const rankingContainer = document.getElementById('dashboard-ranking-list');
+            const mistakesContainer = document.getElementById('dashboard-mistake-chart');
+            if (!latestContainer || !rankingContainer || !mistakesContainer) return;
+
+            const query = (document.getElementById('dashboard-search')?.value || '').trim();
+            const records = getDashboardRecords();
+            const emptyMessage = query
+                ? 'No checked results match that name or student ID.'
+                : 'No checked assignment results are available yet.';
+
+            if (!records.length) {
+                renderDashboardEmpty(latestContainer, emptyMessage);
+                renderDashboardEmpty(rankingContainer, emptyMessage);
+                renderDashboardEmpty(mistakesContainer, emptyMessage);
+                return;
+            }
+
+            const latest = records
+                .slice()
+                .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+                .slice(0, 5);
+
+            latestContainer.innerHTML = `
+                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="px-4 py-3 font-bold text-slate-600">Name</th>
+                                <th class="px-4 py-3 font-bold text-slate-600">ID</th>
+                                <th class="px-4 py-3 font-bold text-slate-600 text-right">Mark</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 bg-white">
+                            ${latest.map(record => {
+                                const summary = getRecordSummary(record);
+                                return `
+                                    <tr>
+                                        <td class="px-4 py-3 font-semibold text-slate-900">${escapeHtml(summary.name)}</td>
+                                        <td class="px-4 py-3 text-slate-600">${escapeHtml(summary.id)}</td>
+                                        <td class="px-4 py-3 text-right font-bold text-slate-900">${summary.total}/${summary.max}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            const ranked = records
+                .slice()
+                .sort((a, b) => getRecordSummary(b).percent - getRecordSummary(a).percent || new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+            rankingContainer.innerHTML = ranked.map((record, index) => {
+                const recordIndex = historyRecords.indexOf(record);
+                const summary = getRecordSummary(record);
+                const barColor = summary.percent >= 70 ? 'bg-emerald-500' : summary.percent >= 40 ? 'bg-amber-500' : 'bg-red-500';
+                return `
+                    <button onclick="openDashboardRecord(${recordIndex})" class="w-full text-left rounded-2xl border border-slate-200 hover:border-slate-400 p-4 transition-colors">
+                        <div class="flex items-center justify-between gap-3 mb-3">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm font-bold">${index + 1}</div>
+                                <div class="min-w-0">
+                                    <div class="font-bold text-slate-900 truncate">${escapeHtml(summary.name)}</div>
+                                    <div class="text-xs text-slate-500 truncate">${escapeHtml(summary.id)}</div>
+                                </div>
+                            </div>
+                            <div class="text-right shrink-0">
+                                <div class="font-bold text-slate-900">${summary.percent}%</div>
+                                <div class="text-xs text-slate-500">${summary.total}/${summary.max}</div>
+                            </div>
+                        </div>
+                        <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
+                            <div class="h-full ${barColor}" style="width:${Math.max(0, Math.min(100, summary.percent))}%"></div>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+
+            const mistakeCounts = {};
+            records.forEach(record => {
+                const summary = getRecordSummary(record);
+                const criteria = Array.isArray(summary.normalized.criterionResults) ? summary.normalized.criterionResults : [];
+                criteria.forEach(item => {
+                    const mark = Number(item.awardedMark || item.awarded_mark || 0);
+                    const maxMark = Number(item.maxMark || item.max_mark || 0);
+                    if (!maxMark || mark / maxMark >= 0.7) return;
+                    const label = item.criterion || item.task || 'Unspecified criterion';
+                    mistakeCounts[label] = (mistakeCounts[label] || 0) + 1;
+                });
+            });
+
+            const allMistakes = Object.entries(mistakeCounts)
+                .sort((a, b) => b[1] - a[1]);
+            const mistakes = allMistakes.slice(0, 5);
+
+            if (!mistakes.length) {
+                renderDashboardEmpty(mistakesContainer, 'No repeated low-scoring criteria found for the current results.');
+                return;
+            }
+
+            const totalLowScores = allMistakes.reduce((sum, [, count]) => sum + count, 0);
+            const [topMistakeLabel, topMistakeCount] = mistakes[0];
+            const issueText = topMistakeCount === 1 ? 'student had this issue' : 'students had this issue';
+            mistakesContainer.innerHTML = `
+                <div class="space-y-4">
+                    <p class="text-sm text-slate-600 leading-6">
+                        This shows criteria where students scored below 70%, so you know what to teach or review first.
+                    </p>
+
+                    <div class="rounded-2xl bg-red-50 border border-red-100 p-4">
+                        <div class="text-xs font-bold uppercase tracking-wider text-red-600">Needs attention first</div>
+                        <div class="mt-2 text-base font-bold text-slate-900 leading-6">${escapeHtml(topMistakeLabel)}</div>
+                        <div class="mt-2 text-sm text-red-700">${topMistakeCount} ${issueText}</div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="rounded-xl bg-slate-50 border border-slate-200 p-3">
+                            <div class="text-2xl font-bold text-slate-900">${allMistakes.length}</div>
+                            <div class="text-xs text-slate-500">mistake areas</div>
+                        </div>
+                        <div class="rounded-xl bg-slate-50 border border-slate-200 p-3">
+                            <div class="text-2xl font-bold text-slate-900">${totalLowScores}</div>
+                            <div class="text-xs text-slate-500">low scores found</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="text-sm font-bold text-slate-900 mb-2">Top areas to improve</div>
+                        <div class="space-y-2">
+                            ${mistakes.map(([label, count], index) => `
+                                <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3">
+                                    <div class="w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold shrink-0">${index + 1}</div>
+                                    <div class="min-w-0 flex-1">
+                                        <div class="text-sm font-semibold text-slate-800 leading-5">${escapeHtml(label)}</div>
+                                        <div class="text-xs text-slate-500 mt-1">${count} ${count === 1 ? 'student needs' : 'students need'} improvement here</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         async function loadHistory(force = false) {
             const status = document.getElementById('history-status');
             const list = document.getElementById('history-list');
@@ -320,6 +572,8 @@
             if (!isSupabaseConfigured()) {
                 status.innerHTML = '<span class="font-semibold text-amber-700">Supabase is not configured.</span><br><span class="text-xs">Set SUPABASE_URL and SUPABASE_ANON_KEY in index.html, then enable SELECT access for this table.</span>';
                 list.innerHTML = '';
+                historyRecords = [];
+                renderDashboardOverview();
                 return;
             }
 
@@ -330,6 +584,7 @@
 
             status.textContent = 'Loading history...';
             list.innerHTML = '';
+            renderDashboardLoading();
 
             try {
                 const url = `${SUPABASE_URL}/rest/v1/${SUPABASE_HISTORY_TABLE}?select=id,created_at,student_name,student_id,overall_total,overall_max,word_count,success,message,overview,result&order=created_at.desc&limit=50`;
@@ -346,6 +601,7 @@
             } catch (error) {
                 debugLog('History load failed', error.message);
                 status.innerHTML = `<span class="font-semibold text-red-700">Could not load history.</span><br><span class="text-xs">${escapeHtml(error.message)}</span>`;
+                renderDashboardOverview();
             }
         }
 
@@ -396,6 +652,7 @@
                     </button>
                 `;
             }).join('');
+            renderDashboardOverview();
         }
 
         function openHistoryRecord(index) {
@@ -442,6 +699,19 @@
                 if (!el) return;
                 el.classList.toggle('hidden-view', v !== viewId);
             });
+
+            const dashboardBtn = document.getElementById('sidebar-dashboard-btn');
+            const uploadBtn = document.getElementById('sidebar-upload-btn');
+            const setActive = (button, isActive) => {
+                if (!button) return;
+                button.classList.toggle('bg-slate-900', isActive);
+                button.classList.toggle('text-white', isActive);
+                button.classList.toggle('text-slate-700', !isActive);
+                button.classList.toggle('hover:bg-blue-50', !isActive);
+                button.classList.toggle('hover:text-blue-700', !isActive);
+            };
+            setActive(dashboardBtn, viewId === 'dashboard');
+            setActive(uploadBtn, viewId === 'upload' || viewId === 'loading' || viewId === 'feedback');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
