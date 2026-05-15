@@ -1,4 +1,4 @@
-const WEBHOOK_URL = 'https://n8n.srv1326411.hstgr.cloud/webhook-test/assignment-checker';
+const WEBHOOK_URL = 'https://n8n.srv1326411.hstgr.cloud/webhook/assignment-checker';
 const SUPABASE_URL = 'https://iqitcwiybbwjodveuovi.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxaXRjd2l5YmJ3am9kdmV1b3ZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NDUzOTUsImV4cCI6MjA5MzEyMTM5NX0.k7vEW0kZFxfwYvZTQyuE1nWUDRnyvbWIIfrhhIteAnI';
 const SUPABASE_HISTORY_TABLE = 'assignment_results';
