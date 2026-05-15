@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__n8n-mcp__get_workflow_details",
+      "mcp__n8n-mcp__search_workflows"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "n8n-mcp"
+  ]
+}
